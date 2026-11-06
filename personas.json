@@ -1,0 +1,42 @@
+{
+  "v": 1,
+  "description": "Metis 人设库索引。由 scripts/build-index.mjs 自动生成，不要手改。",
+  "count": 5,
+  "personas": [
+    {
+      "id": "concise",
+      "name": "简洁协作",
+      "description": "中文、先结论、改代码前先读现有实现",
+      "file": "personas/concise.md",
+      "bytes": 280
+    },
+    {
+      "id": "debugger",
+      "name": "排障模式",
+      "description": "先复现再修，不做无根据的猜测",
+      "file": "personas/debugger.md",
+      "bytes": 358
+    },
+    {
+      "id": "explainer",
+      "name": "讲解模式",
+      "description": "讲清原理，先给心智模型再给细节",
+      "file": "personas/explainer.md",
+      "bytes": 405
+    },
+    {
+      "id": "reviewer",
+      "name": "代码审查",
+      "description": "只指出问题，不改代码",
+      "file": "personas/reviewer.md",
+      "bytes": 369
+    },
+    {
+      "id": "strict",
+      "name": "严格模式",
+      "description": "只做被要求的事，不主动扩展范围",
+      "file": "personas/strict.md",
+      "bytes": 311
+    }
+  ]
+}

@@ -53,6 +53,30 @@ metis import dulingzhi/metis-personas --overwrite
 | `explainer` | 讲解模式 | 先给心智模型再给细节 |
 | `debugger` | 排障模式 | 先复现再修，不做无根据的猜测 |
 
+## 仓库结构
+
+```
+personas/            人设正文（一份一个 .md）
+personas.json        **索引文件**，由 scripts/build-index.mjs 自动生成
+scripts/build-index.mjs
+.github/workflows/index.yml
+```
+
+## 为什么有 `personas.json`
+
+Metis 导入时要先知道"仓库里有哪些人设"。用 GitHub 的 contents API 查一次会消耗
+一次限流额度（未认证只有 **60 次/小时**），多人共用同一出口 IP 时很容易撞上。
+
+所以把索引**预先生成**成一个静态文件，客户端只需：
+
+1. 下载 `personas.json`（`raw.githubusercontent.com`，CDN，无 API 限流）
+2. 按里面的 `file` 路径逐份下载正文（同样是 raw CDN）
+
+**全程不调用 `api.github.com`。**
+
+索引由 workflow 在每次 push 到 `personas/` 时自动重建并提交 ——
+**不要手改 `personas.json`**，它会被下一次自动提交覆盖。
+
 ## 许可
 
 CC0-1.0（公有领域）。人设文本是实用性的工作约定，不该有版权负担。

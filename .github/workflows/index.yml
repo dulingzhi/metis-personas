@@ -1,0 +1,51 @@
+name: 更新人设索引
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "personas/**"
+      - "scripts/build-index.mjs"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # 索引是**派生文件**：由 personas/ 决定，不手改。
+      # 有 diff 才提交，避免空提交刷历史。
+      - name: 重建 personas.json
+        run: node scripts/build-index.mjs
+
+      - name: 校验每个人设都有 id 与 name
+        run: |
+          node -e '
+            const idx = require("./personas.json");
+            const bad = idx.personas.filter(p => !p.id || !p.name);
+            if (bad.length) {
+              console.error("缺少 id 或 name：" + bad.map(p => p.file).join(", "));
+              process.exit(1);
+            }
+            console.log(`✓ ${idx.count} 份人设都有 id 与 name`);
+          '
+
+      - name: 提交变更
+        run: |
+          if git diff --quiet personas.json; then
+            echo "索引无变化"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add personas.json
+          git commit -m "自动更新 personas.json"
+          git push
