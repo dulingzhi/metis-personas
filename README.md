@@ -74,6 +74,10 @@ Metis 导入时要先知道"仓库里有哪些人设"。用 GitHub 的 contents 
 
 **全程不调用 `api.github.com`。**
 
+实际实现走的是 **`codeload.github.com` 的 tarball**（一次请求拿整个仓库）：
+`raw.githubusercontent.com` 在部分网络环境下不可达，而 tarball 只需 **1 个请求**，
+与仓库有多少份人设无关，也不会触碰 API 限流。
+
 索引由 workflow 在每次 push 到 `personas/` 时自动重建并提交 ——
 **不要手改 `personas.json`**，它会被下一次自动提交覆盖。
 
